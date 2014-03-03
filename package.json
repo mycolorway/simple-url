@@ -1,0 +1,20 @@
+{
+  "name": "simple-url",
+  "version": "0.0.1",
+  "description": "A lib to parse the url",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mycolorway/simple-url.git"
+  },
+  "author": "tinyfive",
+  "license": "GPL",
+  "bugs": {
+    "url": "https://github.com/mycolorway/simple-url/issues"
+  },
+  "homepage": "https://github.com/mycolorway/simple-url",
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-contrib-coffee": "~0.8.0"
+  }
+}

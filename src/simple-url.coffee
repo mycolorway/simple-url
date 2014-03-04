@@ -4,43 +4,119 @@ class Url
     return null unless url
 
     @_url = url
-    @url = url
+    @protocol = ""
+    @host = ""
+    @port = ""
+    @pathname = ""
+    @search = ""
+    @hash = ""
 
-    defaultProtocol = location?.protocol || 'http:'
+    url = url.split("//")
 
-    if @url.substring(0, 2) is "//"
-      @url = "#{ defaultProtocol }#{ @url }"
-    else if @url.split('://').length is 1
-      @url = "#{ defaultProtocol }//#{ @url }"
+    if url.length is 1
+      url = url[0]
+    else
+      @protocol = url[0]
+      url = url[1]
 
+    arr = url.split("/")
+    host = arr[0].split(":")
+    @host = host[0]
 
-  get: (name) ->
-    switch name
-      when "path"
-        @_getPath()
-      when "search", "?"
-        @_getSearch()
-      when "hash", "#"
-        @_getHash()
-      else
-        return undefined
+    if host.length > 1
+      @port = host[1]
 
+    if arr.length > 1
+      prefix = "/"
+    else
+      prefix = ""
 
-  _getPath: ->
-    arrUrl = @url.split('/')
-    "/#{ arrUrl.slice(3, arrUrl.length).join('/').split('?')[0].split('#')[0] }"
-
-
-  _getSearch: ->
-    (@url.split('?')[1] || '').split('#')[0]
-
-
-  _getHash: ->
-    (@url.split('#')[1] || '')
+    @pathname = "#{ prefix }#{ arr.slice(1, arr.length).join('/').split('?')[0].split('#')[0] }"
+    @hash = url.split('#')[1] || ''
+    @search = (url.split('?')[1] || '').split('#')[0]
+    @search = Url.parseParams @search if @search
 
 
+  @parseParams: (str) ->
+    obj = {}
 
-@simple = {}
+    for param in str.split('&')
+      [k, v] = param.split('=')
+      obj[k] = v
+
+    obj
+
+
+  @serializeParams: (obj) ->
+    return "" unless obj
+    ([k, v].join('=') for k, v of obj).join('&')
+
+
+  @isEmptyObj: (obj) ->
+    for k, v of obj
+      if obj.hasOwnProperty(k)
+        return false
+
+    true
+
+
+  toString: () ->
+    url = ""
+
+    if @protocol
+      url += "#{ @protocol }//"
+
+    if @host
+      url += "#{ @host }"
+
+    if @port
+      url += ":#{ @port }"
+
+    url += @pathname
+
+    if @search
+      url += "?#{ Url.serializeParams(@search) }"
+
+    if @hash
+      url += "##{ @hash }"
+
+    url
+
+
+  setParam: () ->
+    args = arguments
+
+    if args.length is 1 and typeof args[0] is "object"
+      obj = args[0]
+    else if args.length is 2
+      obj = {}
+      obj[args[0].toString()] = args[1].toString()
+    else
+      return false
+
+    @search ||= {}
+
+    for k, v of obj
+      @search[k.toString()] = v.toString()
+
+    @search
+
+
+  getParam: (name) ->
+    @search[name]
+
+
+  removeParam: (name) ->
+    return true unless @search
+    delete @search[name]
+
+    if Url.isEmptyObj(@search)
+      @search = ""
+
+
+
+
+@simple = {} unless @simple
 
 @simple.url = (url) ->
   new Url(url)

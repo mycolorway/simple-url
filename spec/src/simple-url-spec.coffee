@@ -91,7 +91,7 @@ describe "pathname", ->
 describe "search and hash", ->
   it "should get empty string when no search and hash", ->
     url = simple.url("http://tower.im/")
-    expect(url.search).toEqual("")
+    expect(url.search).toEqual({})
     expect(url.hash).toEqual("")
 
 
@@ -124,7 +124,7 @@ describe "search and hash", ->
     url.removeParam("a")
     expect(url.search).toEqual({b: "2"})
     url.removeParam("b")
-    expect(url.search).toEqual("")
+    expect(url.search).toEqual({})
 
 
 

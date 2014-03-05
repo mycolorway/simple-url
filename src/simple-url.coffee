@@ -8,7 +8,7 @@ class Url
     @host = ""
     @port = ""
     @pathname = ""
-    @search = ""
+    @search = {}
     @hash = ""
 
     url = url.split("//")
@@ -32,9 +32,8 @@ class Url
       prefix = ""
 
     @pathname = "#{ prefix }#{ arr.slice(1, arr.length).join('/').split('?')[0].split('#')[0] }"
-    @hash = url.split('#')[1] || ''
-    @search = (url.split('?')[1] || '').split('#')[0]
-    @search = Url.parseParams @search if @search
+    @hash = url.split("#")[1] || ""
+    @search = Url.parseParams (url.split("?")[1] || "").split("#")[0]
 
 
   @parseParams: (str) ->
@@ -42,7 +41,7 @@ class Url
 
     for param in str.split('&')
       [k, v] = param.split('=')
-      obj[k] = v
+      obj[k] = v if k
 
     obj
 
@@ -74,8 +73,9 @@ class Url
 
     url += @pathname
 
-    if @search
-      url += "?#{ Url.serializeParams(@search) }"
+    search = Url.serializeParams(@search)
+    if search
+      url += "?#{ search }"
 
     if @hash
       url += "##{ @hash }"
@@ -107,12 +107,7 @@ class Url
 
 
   removeParam: (name) ->
-    return true unless @search
     delete @search[name]
-
-    if Url.isEmptyObj(@search)
-      @search = ""
-
 
 
 

@@ -98,7 +98,7 @@
     it("should get empty string when no search and hash", function() {
       var url;
       url = simple.url("http://tower.im/");
-      expect(url.search).toEqual("");
+      expect(url.search).toEqual({});
       return expect(url.hash).toEqual("");
     });
     it("should get right search and hash when it has", function() {
@@ -145,7 +145,7 @@
         b: "2"
       });
       url.removeParam("b");
-      return expect(url.search).toEqual("");
+      return expect(url.search).toEqual({});
     });
   });
 

@@ -150,7 +150,7 @@
   });
 
   describe("toString", function() {
-    return it("should get right string", function() {
+    it("should get right string", function() {
       var str, url;
       str = "http://tower.im:8080/project/123?a=1&b=2#20120101";
       url = simple.url(str);
@@ -164,6 +164,27 @@
       str = "/project/123#20120101";
       url = simple.url(str);
       return expect(url.toString()).toEqual(str);
+    });
+    it("should get right string when request relative", function() {
+      var str, url;
+      str = "http://tower.im:8080/project/123?a=1&b=2#20120101";
+      url = simple.url(str);
+      expect(url.toString("relative")).toEqual("/project/123?a=1&b=2#20120101");
+      str = "tower.im/project/123?a=1&b=2#20120101";
+      url = simple.url(str);
+      expect(url.toString("relative")).toEqual("/project/123?a=1&b=2#20120101");
+      str = "/project/123?a=1&b=2#20120101";
+      url = simple.url(str);
+      expect(url.toString("relative")).toEqual(str);
+      str = "/project";
+      url = simple.url(str);
+      return expect(url.toString("relative")).toEqual(str);
+    });
+    return it("should get empty string if request type is not absolute or relative", function() {
+      var str, url;
+      str = "/project";
+      url = simple.url(str);
+      return expect(url.toString("fuck")).toEqual("");
     });
   });
 

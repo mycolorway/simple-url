@@ -51,25 +51,28 @@ class Url
     ([k, v].join('=') for k, v of obj).join('&')
 
 
-  @isEmptyObj: (obj) ->
-    for k, v of obj
-      if obj.hasOwnProperty(k)
-        return false
+  # @isEmptyObj: (obj) ->
+  #   for k, v of obj
+  #     if obj.hasOwnProperty(k)
+  #       return false
 
-    true
+  #   true
 
 
-  toString: () ->
+  toString: (type="absolute") ->
     url = ""
 
-    if @protocol
-      url += "#{ @protocol }//"
+    return url unless /absolute|relative/.test(type)
 
-    if @host
-      url += "#{ @host }"
+    if type is "absolute"
+      if @protocol
+        url += "#{ @protocol }//"
 
-    if @port
-      url += ":#{ @port }"
+      if @host
+        url += "#{ @host }"
+
+      if @port
+        url += ":#{ @port }"
 
     url += @pathname
 

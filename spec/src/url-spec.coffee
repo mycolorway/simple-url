@@ -145,3 +145,27 @@ describe "toString", ->
     str = "/project/123#20120101"
     url = simple.url(str)
     expect(url.toString()).toEqual(str)
+
+
+  it "should get right string when request relative", ->
+    str = "http://tower.im:8080/project/123?a=1&b=2#20120101"
+    url = simple.url(str)
+    expect(url.toString("relative")).toEqual("/project/123?a=1&b=2#20120101")
+
+    str = "tower.im/project/123?a=1&b=2#20120101"
+    url = simple.url(str)
+    expect(url.toString("relative")).toEqual("/project/123?a=1&b=2#20120101")
+
+    str = "/project/123?a=1&b=2#20120101"
+    url = simple.url(str)
+    expect(url.toString("relative")).toEqual(str)
+
+    str = "/project"
+    url = simple.url(str)
+    expect(url.toString("relative")).toEqual(str)
+
+
+  it "should get empty string if request type is not absolute or relative", ->
+    str = "/project"
+    url = simple.url(str)
+    expect(url.toString("fuck")).toEqual("")

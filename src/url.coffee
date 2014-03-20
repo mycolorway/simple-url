@@ -31,7 +31,7 @@ class Url
     else
       prefix = ""
 
-    @pathname = "#{ prefix }#{ arr.slice(1, arr.length).join('/').split('?')[0].split('#')[0] }"
+    @pathname = "#{ prefix }#{ arr.slice(1, arr.length).join('/').split('?')[0].split('#')[0] }".replace(/\/$/ig, '') + "/"
     @hash = url.split("#")[1] || ""
     @search = Url.parseParams (url.split("?")[1] || "").split("#")[0]
 

@@ -1,9 +1,10 @@
 (function() {
   describe("initialize", function() {
     return it("should get location.href when without param", function() {
-      var url;
+      var local, url;
       url = simple.url();
-      return expect(url.toString()).toEqual(location.href);
+      local = location.href.replace(/\/$/ig, "") + "/";
+      return expect(url.toString()).toEqual(local);
     });
   });
 
@@ -70,22 +71,22 @@
     it("should get empty string when only search", function() {
       var url;
       url = simple.url("?a=1");
-      return expect(url.pathname).toEqual("");
+      return expect(url.pathname).toEqual("/");
     });
     it("should get right string when just a path", function() {
       var url;
       url = simple.url("/project/123?a=1");
-      return expect(url.pathname).toEqual("/project/123");
+      return expect(url.pathname).toEqual("/project/123/");
     });
     it("should get right string when it is relative path", function() {
       var url;
       url = simple.url("project/123");
-      return expect(url.pathname).toEqual("/123");
+      return expect(url.pathname).toEqual("/123/");
     });
     it("should get right string when it is a root path", function() {
       var url;
       url = simple.url("tower.im");
-      return expect(url.pathname).toEqual("");
+      return expect(url.pathname).toEqual("/");
     });
     return it("should get right string when it is a root path with slash", function() {
       var url;
@@ -154,31 +155,31 @@
       var str, url;
       str = "http://tower.im:8080/project/123?a=1&b=2#20120101";
       url = simple.url(str);
-      expect(url.toString()).toEqual(str);
+      expect(url.toString()).toEqual("http://tower.im:8080/project/123/?a=1&b=2#20120101");
       str = "tower.im/project/123?a=1&b=2#20120101";
       url = simple.url(str);
-      expect(url.toString()).toEqual(str);
-      str = "/project/123?a=1&b=2#20120101";
+      expect(url.toString()).toEqual("tower.im/project/123/?a=1&b=2#20120101");
+      str = "/project/123/?a=1&b=2#20120101";
       url = simple.url(str);
-      expect(url.toString()).toEqual(str);
+      expect(url.toString()).toEqual("/project/123/?a=1&b=2#20120101");
       str = "/project/123#20120101";
       url = simple.url(str);
-      return expect(url.toString()).toEqual(str);
+      return expect(url.toString()).toEqual("/project/123/#20120101");
     });
     it("should get right string when request relative", function() {
       var str, url;
-      str = "http://tower.im:8080/project/123?a=1&b=2#20120101";
+      str = "http://tower.im:8080/project/123/?a=1&b=2#20120101";
       url = simple.url(str);
-      expect(url.toString("relative")).toEqual("/project/123?a=1&b=2#20120101");
+      expect(url.toString("relative")).toEqual("/project/123/?a=1&b=2#20120101");
       str = "tower.im/project/123?a=1&b=2#20120101";
       url = simple.url(str);
-      expect(url.toString("relative")).toEqual("/project/123?a=1&b=2#20120101");
+      expect(url.toString("relative")).toEqual("/project/123/?a=1&b=2#20120101");
       str = "/project/123?a=1&b=2#20120101";
       url = simple.url(str);
-      expect(url.toString("relative")).toEqual(str);
+      expect(url.toString("relative")).toEqual("/project/123/?a=1&b=2#20120101");
       str = "/project";
       url = simple.url(str);
-      return expect(url.toString("relative")).toEqual(str);
+      return expect(url.toString("relative")).toEqual("/project/");
     });
     return it("should get empty string if request type is not absolute or relative", function() {
       var str, url;

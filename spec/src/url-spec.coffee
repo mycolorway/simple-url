@@ -1,7 +1,8 @@
 describe "initialize", ->
   it "should get location.href when without param", ->
     url = simple.url()
-    expect(url.toString()).toEqual(location.href)
+    local = location.href.replace(/\/$/ig, "") + "/"
+    expect(url.toString()).toEqual(local)
 
 
 
@@ -63,23 +64,23 @@ describe "port", ->
 describe "pathname", ->
   it "should get empty string when only search", ->
     url = simple.url("?a=1")
-    expect(url.pathname).toEqual("")
+    expect(url.pathname).toEqual("/")
 
 
   it "should get right string when just a path", ->
     url = simple.url("/project/123?a=1")
-    expect(url.pathname).toEqual("/project/123")
+    expect(url.pathname).toEqual("/project/123/")
 
 
   it "should get right string when it is relative path", ->
     url = simple.url("project/123")
-    expect(url.pathname).toEqual("/123")
+    expect(url.pathname).toEqual("/123/")
 
 
 
   it "should get right string when it is a root path", ->
     url = simple.url("tower.im")
-    expect(url.pathname).toEqual("")
+    expect(url.pathname).toEqual("/")
 
 
   it "should get right string when it is a root path with slash", ->
@@ -132,37 +133,37 @@ describe "toString", ->
   it "should get right string", ->
     str = "http://tower.im:8080/project/123?a=1&b=2#20120101"
     url = simple.url(str)
-    expect(url.toString()).toEqual(str)
+    expect(url.toString()).toEqual("http://tower.im:8080/project/123/?a=1&b=2#20120101")
 
     str = "tower.im/project/123?a=1&b=2#20120101"
     url = simple.url(str)
-    expect(url.toString()).toEqual(str)
+    expect(url.toString()).toEqual("tower.im/project/123/?a=1&b=2#20120101")
 
-    str = "/project/123?a=1&b=2#20120101"
+    str = "/project/123/?a=1&b=2#20120101"
     url = simple.url(str)
-    expect(url.toString()).toEqual(str)
+    expect(url.toString()).toEqual("/project/123/?a=1&b=2#20120101")
 
     str = "/project/123#20120101"
     url = simple.url(str)
-    expect(url.toString()).toEqual(str)
+    expect(url.toString()).toEqual("/project/123/#20120101")
 
 
   it "should get right string when request relative", ->
-    str = "http://tower.im:8080/project/123?a=1&b=2#20120101"
+    str = "http://tower.im:8080/project/123/?a=1&b=2#20120101"
     url = simple.url(str)
-    expect(url.toString("relative")).toEqual("/project/123?a=1&b=2#20120101")
+    expect(url.toString("relative")).toEqual("/project/123/?a=1&b=2#20120101")
 
     str = "tower.im/project/123?a=1&b=2#20120101"
     url = simple.url(str)
-    expect(url.toString("relative")).toEqual("/project/123?a=1&b=2#20120101")
+    expect(url.toString("relative")).toEqual("/project/123/?a=1&b=2#20120101")
 
     str = "/project/123?a=1&b=2#20120101"
     url = simple.url(str)
-    expect(url.toString("relative")).toEqual(str)
+    expect(url.toString("relative")).toEqual("/project/123/?a=1&b=2#20120101")
 
     str = "/project"
     url = simple.url(str)
-    expect(url.toString("relative")).toEqual(str)
+    expect(url.toString("relative")).toEqual("/project/")
 
 
   it "should get empty string if request type is not absolute or relative", ->

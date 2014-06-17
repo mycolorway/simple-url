@@ -13,12 +13,13 @@
 	"license": "MIT",
 	"ignore": [
 		"**/.*",
+		"spec",
 		"node_modules",
 		"vendor",
 		"Gemfile",
 		"Gruntfile.coffee",
 		"package.json",
-		"README"
+		"README.md"
 	]
 }
 

@@ -9,8 +9,8 @@ module.exports = (grunt) ->
     coffee:
       module:
         files:
-          'lib/simpile-url.js': 'src/simple-url.coffee'
-          'spec/lib/simple-url-spec.js': 'spec/src/simple-url-spec.coffee'
+          'lib/url.js': 'src/url.coffee'
+          'spec/lib/url-spec.js': 'spec/src/url-spec.coffee'
     watch:
       scripts:
         files: ['src/**/*.coffee', 'spec/src/**/*.coffee']
@@ -19,7 +19,7 @@ module.exports = (grunt) ->
       pivotal:
         src: 'lib/**/*.js'
         options:
-          specs: 'spec/lib/simple-url-spec.js'
+          specs: 'spec/lib/url-spec.js'
           summary: true
           host : 'http://127.0.0.1:8000/'
 
@@ -29,4 +29,3 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-connect'
 
   grunt.registerTask 'test', ['coffee', 'connect', 'jasmine']
-  grunt.registerTask 'default', ['watch']

@@ -112,9 +112,5 @@ class Url
   removeParam: (name) ->
     delete @search[name]
 
-
-
-@simple = {} unless @simple
-
-@simple.url = (url) ->
+url = (url) ->
   new Url(url)

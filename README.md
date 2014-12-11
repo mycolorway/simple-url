@@ -27,7 +27,7 @@ __url__
 
 String，需要转换的URL字符串
 
-#### Url对象成员
+#### 只读属性
 
 __protocol__
 

@@ -17,6 +17,9 @@ class Url
       @hash
     } = @link
 
+    # fix grunt test
+    @port = '' if @port is '0'
+
     @origin = [@protocol, '//', @hostname].join ''
     @origin += ":#{ @port }" if @port.length > 0
 

@@ -4,27 +4,33 @@ module.exports = (grunt) ->
 
     pkg: grunt.file.readJSON 'package.json'
 
-    connect:
-      uses_defaults: {}
-
     coffee:
       options:
         bare: true
-      module:
+      src:
         files:
           'lib/url.js': 'src/url.coffee'
+      spec:
+        files:
           'spec/url-spec.js': 'spec/url-spec.coffee'
+
     watch:
       scripts:
         files: ['src/**/*.coffee', 'spec/**/*.coffee']
         tasks: ['coffee', 'umd']
+      jasmine:
+        files: [
+          'lib/url.js'
+          'spec/url-spec.js'
+        ]
+        tasks: 'jasmine:test:build'
+
     jasmine:
-      pivotal:
+      test:
         src: 'lib/**/*.js'
         options:
+          outfile: 'spec/index.html'
           specs: 'spec/url-spec.js'
-          summary: true
-          host : 'http://127.0.0.1:8000/'
 
     umd:
       all:
@@ -44,7 +50,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-contrib-jasmine'
-  grunt.loadNpmTasks 'grunt-contrib-connect'
   grunt.loadNpmTasks 'grunt-umd'
 
-  grunt.registerTask 'test', ['coffee', 'umd', 'connect', 'jasmine', 'watch']
+  grunt.registerTask 'default', ['coffee', 'umd', 'jasmine:test:build', 'watch']
+  grunt.registerTask 'test', ['coffee', 'umd', 'jasmine:test']

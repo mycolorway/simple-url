@@ -1,30 +1,31 @@
 class Url
   constructor: (@_url = document.location.href) ->
     return @_url if @_url.constructor is Url
-    @link ?= document.createElement 'a'
-    @link.href = @_url
-    @_parse()
 
-  _parse: ->
-    {
-      @href,
-      @protocol,
-      @host,
-      @hostname,
-      @port,
-      @pathname,
-      @search,
-      @hash
-    } = @link
+    link = document.createElement 'a'
+    link.href = @_url
+    {href, @protocol, @host, @hostname, @port, @pathname, @search, @hash} = link
 
     # fix grunt test
     @port = '' if @port is '0'
 
-    @origin = [@protocol, '//', @hostname].join ''
-    @origin += ":#{ @port }" if @port.length > 0
+    @search = Url.parseParams @search
+    @hash = @hash.replace(/^#/ig, '')
 
-    @relative = [@pathname, @search, @hash].join ''
-    @absolute = @href
+  toString: (type = 'absolute') ->
+    switch type
+      when 'origin'
+        str = [@protocol, '//', @hostname].join ''
+        str += ":#{ @port }" if @port.length > 0
+      when 'relative'
+        hash = if @hash.length > 0 then "##{ @hash }" else @hash
+        str = [@pathname, Url.serializeParams(@search), hash].join ''
+      when 'absolute'
+        str = "#{ @toString('origin') }#{ @toString('relative') }"
+      else
+        str = ''
+
+    str
 
   setParam: () ->
     args = arguments
@@ -37,22 +38,14 @@ class Url
     else
       return false
 
-    params = Url.parseParams @search
-
     for k, v of obj
-      params[k.toString()] = v.toString()
-
-    @link.search = Url.serializeParams params
-    @_parse()
+      @search[k.toString()] = v.toString()
 
   getParam: (name) ->
-    Url.parseParams(@search)[name]
+    @search[name]
 
   removeParam: (name) ->
-    params = Url.parseParams @search
-    delete params[name]
-    @link.search = Url.serializeParams params
-    @_parse()
+    delete @search[name]
 
   @parseParams: (str) ->
     str = str.replace(/^\?/ig, '')
@@ -66,7 +59,9 @@ class Url
 
   @serializeParams: (obj) ->
     return "" unless obj
-    ([k, v].join('=') for k, v of obj).join('&')
+    str = ([k, v].join('=') for k, v of obj).join('&')
+    str = '?' + str if str.length > 0
+    str
 
 url = (url) ->
   new Url(url)

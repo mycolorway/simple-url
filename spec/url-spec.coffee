@@ -2,7 +2,7 @@ describe "initialize", ->
   it "should get location.href when without param", ->
     url = simple.url()
     local = location.href
-    expect(url.absolute).toEqual(local)
+    expect(url.toString('absolute')).toEqual(local)
 
 describe "protocol", ->
   it "should be same as location when no protocol and double slash", ->
@@ -64,17 +64,17 @@ describe "pathname", ->
 describe "search and hash", ->
   it "should get empty string when no search and hash", ->
     url = simple.url("http://tower.im/")
-    expect(url.search).toEqual("")
+    expect(url.search).toEqual({})
     expect(url.hash).toEqual("")
 
   it "should get right search and hash when it has", ->
     url = simple.url("http://tower.im/?a=1&b=2#20130303")
-    expect(url.search).toEqual("?a=1&b=2")
-    expect(url.hash).toEqual("#20130303")
+    expect(url.search).toEqual({a:'1', b:'2'})
+    expect(url.hash).toEqual("20130303")
 
   it "should get empty string when search value is nothing", ->
     url = simple.url("http://tower.im/?a=")
-    expect(url.search).toEqual("?a=")
+    expect(url.search).toEqual({a:''})
 
   it "should get right string when use getParam", ->
     url = simple.url("http://tower.im/?a=1&b=2")
@@ -83,41 +83,41 @@ describe "search and hash", ->
 
   it "should set right search when search is empty string", ->
     url = simple.url("http://tower.im/")
-    url.setParam("a", 1)
-    url.setParam({b: 2, c: 3})
-    expect(url.search).toEqual("?a=1&b=2&c=3")
-    expect(url.absolute).toEqual("http://tower.im/?a=1&b=2&c=3")
+    url.setParam('a', '1')
+    url.setParam({b:'2', c:'3'})
+    expect(url.search).toEqual({a:'1', b:'2', c:'3'})
+    expect(url.toString('absolute')).toEqual("http://tower.im/?a=1&b=2&c=3")
 
   it "should get undefined after removeParam", ->
     url = simple.url("http://tower.im/?a=1&b=2")
-    url.removeParam("a")
-    expect(url.search).toEqual("?b=2")
-    url.removeParam("b")
-    expect(url.search).toEqual("")
+    url.removeParam('a')
+    expect(url.search).toEqual({b:'2'})
+    url.removeParam('b')
+    expect(url.search).toEqual({})
 
 describe "toString", ->
   it "should get right string", ->
     str = "http://tower.im:8080/project/123?a=1&b=2#20120101"
     url = simple.url(str)
-    expect(url.absolute).toEqual("http://tower.im:8080/project/123?a=1&b=2#20120101")
+    expect(url.toString('absolute')).toEqual("http://tower.im:8080/project/123?a=1&b=2#20120101")
 
     str = "/project/123?a=1&b=2#20120101"
     url = simple.url(str)
-    expect(url.absolute).toEqual("#{ url.origin }/project/123?a=1&b=2#20120101")
+    expect(url.toString('absolute')).toEqual("#{ url.toString('origin') }/project/123?a=1&b=2#20120101")
 
     str = "/project/123#20120101"
     url = simple.url(str)
-    expect(url.absolute).toEqual("#{ url.origin }/project/123#20120101")
+    expect(url.toString('absolute')).toEqual("#{ url.toString('origin') }/project/123#20120101")
 
   it "should get right string when request relative", ->
     str = "http://tower.im:8080/project/123?a=1&b=2#20120101"
     url = simple.url(str)
-    expect(url.relative).toEqual("/project/123?a=1&b=2#20120101")
+    expect(url.toString('relative')).toEqual("/project/123?a=1&b=2#20120101")
 
     str = "/project/123?a=1&b=2#20120101"
     url = simple.url(str)
-    expect(url.relative).toEqual("/project/123?a=1&b=2#20120101")
+    expect(url.toString('relative')).toEqual("/project/123?a=1&b=2#20120101")
 
     str = "/project"
     url = simple.url(str)
-    expect(url.relative).toEqual("/project")
+    expect(url.toString('relative')).toEqual("/project")

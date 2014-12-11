@@ -27,7 +27,7 @@ __url__
 
 String，需要转换的URL字符串
 
-#### 只读属性
+#### 属性
 
 __protocol__
 
@@ -51,25 +51,21 @@ String，路径
 
 __search__
 
-String，url中query值，如: '?a=1&b=2'
+Object，url中query值，如: {keyword: 'tower', page: '1'}
 
 __hash__
 
-String，保存url的锚点
-
-__origin__
-
-String，域，包含协议、域名和端口
-
-__absolute__
-
-String，绝对路径
-
-__relative__
-
-String, 相对路径
+String，保存url的锚点，不包含前面的 # 符号
 
 #### 方法
+
+__toString(type)__
+
+参数 type 类型 String，可选值为 absolute（默认） | relative | origin
+
+absolute: 绝对路径
+relative: 相对路径
+origin: 域，包含协议、域名和端口
 
 __setParam()__ Object
 

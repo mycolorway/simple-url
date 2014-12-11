@@ -1,6 +1,6 @@
 {
   "name": "simple-url",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "A lib to parse the url",
   "repository": {
     "type": "git",
@@ -10,6 +10,9 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/mycolorway/simple-url/issues"
+  },
+  "scripts": {
+      "test": "grunt test --verbose"
   },
   "homepage": "https://github.com/mycolorway/simple-url",
   "devDependencies": {

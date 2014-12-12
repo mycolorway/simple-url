@@ -59,13 +59,17 @@ String，保存url的锚点，不包含前面的 # 符号
 
 #### 方法
 
-__toString(type)__
+__absolute__
 
-参数 type 类型 String，可选值为 absolute（默认） | relative | origin
+获取绝对路径
 
-absolute: 绝对路径
-relative: 相对路径
-origin: 域，包含协议、域名和端口
+__relative__
+
+获取相对路径
+
+__origin__
+
+获取域，包含协议、域名和端口
 
 __setParam()__ Object
 

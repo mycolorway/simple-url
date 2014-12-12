@@ -2,7 +2,7 @@ describe "initialize", ->
   it "should get location.href when without param", ->
     url = simple.url()
     local = location.href
-    expect(url.toString('absolute')).toEqual(local)
+    expect(url.absolute()).toEqual(local)
 
 describe "protocol", ->
   it "should be same as location when no protocol and double slash", ->
@@ -86,7 +86,7 @@ describe "search and hash", ->
     url.setParam('a', '1')
     url.setParam({b:'2', c:'3'})
     expect(url.search).toEqual({a:'1', b:'2', c:'3'})
-    expect(url.toString('absolute')).toEqual("http://tower.im/?a=1&b=2&c=3")
+    expect(url.absolute()).toEqual("http://tower.im/?a=1&b=2&c=3")
 
   it "should get undefined after removeParam", ->
     url = simple.url("http://tower.im/?a=1&b=2")
@@ -99,25 +99,25 @@ describe "toString", ->
   it "should get right string", ->
     str = "http://tower.im:8080/project/123?a=1&b=2#20120101"
     url = simple.url(str)
-    expect(url.toString('absolute')).toEqual("http://tower.im:8080/project/123?a=1&b=2#20120101")
+    expect(url.absolute()).toEqual("http://tower.im:8080/project/123?a=1&b=2#20120101")
 
     str = "/project/123?a=1&b=2#20120101"
     url = simple.url(str)
-    expect(url.toString('absolute')).toEqual("#{ url.toString('origin') }/project/123?a=1&b=2#20120101")
+    expect(url.absolute()).toEqual("#{ url.origin() }/project/123?a=1&b=2#20120101")
 
     str = "/project/123#20120101"
     url = simple.url(str)
-    expect(url.toString('absolute')).toEqual("#{ url.toString('origin') }/project/123#20120101")
+    expect(url.absolute()).toEqual("#{ url.origin() }/project/123#20120101")
 
   it "should get right string when request relative", ->
     str = "http://tower.im:8080/project/123?a=1&b=2#20120101"
     url = simple.url(str)
-    expect(url.toString('relative')).toEqual("/project/123?a=1&b=2#20120101")
+    expect(url.relative()).toEqual("/project/123?a=1&b=2#20120101")
 
     str = "/project/123?a=1&b=2#20120101"
     url = simple.url(str)
-    expect(url.toString('relative')).toEqual("/project/123?a=1&b=2#20120101")
+    expect(url.relative()).toEqual("/project/123?a=1&b=2#20120101")
 
     str = "/project"
     url = simple.url(str)
-    expect(url.toString('relative')).toEqual("/project")
+    expect(url.relative()).toEqual("/project")

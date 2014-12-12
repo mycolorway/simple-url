@@ -3,7 +3,7 @@ describe("initialize", function() {
     var local, url;
     url = simple.url();
     local = location.href;
-    return expect(url.toString('absolute')).toEqual(local);
+    return expect(url.absolute()).toEqual(local);
   });
 });
 
@@ -125,7 +125,7 @@ describe("search and hash", function() {
       b: '2',
       c: '3'
     });
-    return expect(url.toString('absolute')).toEqual("http://tower.im/?a=1&b=2&c=3");
+    return expect(url.absolute()).toEqual("http://tower.im/?a=1&b=2&c=3");
   });
   return it("should get undefined after removeParam", function() {
     var url;
@@ -144,24 +144,24 @@ describe("toString", function() {
     var str, url;
     str = "http://tower.im:8080/project/123?a=1&b=2#20120101";
     url = simple.url(str);
-    expect(url.toString('absolute')).toEqual("http://tower.im:8080/project/123?a=1&b=2#20120101");
+    expect(url.absolute()).toEqual("http://tower.im:8080/project/123?a=1&b=2#20120101");
     str = "/project/123?a=1&b=2#20120101";
     url = simple.url(str);
-    expect(url.toString('absolute')).toEqual("" + (url.toString('origin')) + "/project/123?a=1&b=2#20120101");
+    expect(url.absolute()).toEqual("" + (url.origin()) + "/project/123?a=1&b=2#20120101");
     str = "/project/123#20120101";
     url = simple.url(str);
-    return expect(url.toString('absolute')).toEqual("" + (url.toString('origin')) + "/project/123#20120101");
+    return expect(url.absolute()).toEqual("" + (url.origin()) + "/project/123#20120101");
   });
   return it("should get right string when request relative", function() {
     var str, url;
     str = "http://tower.im:8080/project/123?a=1&b=2#20120101";
     url = simple.url(str);
-    expect(url.toString('relative')).toEqual("/project/123?a=1&b=2#20120101");
+    expect(url.relative()).toEqual("/project/123?a=1&b=2#20120101");
     str = "/project/123?a=1&b=2#20120101";
     url = simple.url(str);
-    expect(url.toString('relative')).toEqual("/project/123?a=1&b=2#20120101");
+    expect(url.relative()).toEqual("/project/123?a=1&b=2#20120101");
     str = "/project";
     url = simple.url(str);
-    return expect(url.toString('relative')).toEqual("/project");
+    return expect(url.relative()).toEqual("/project");
   });
 });

@@ -12,19 +12,16 @@ class Url
     @search = Url.parseParams @search
     @hash = @hash.replace(/^#/ig, '')
 
-  toString: (type = 'absolute') ->
-    switch type
-      when 'origin'
-        str = [@protocol, '//', @hostname].join ''
-        str += ":#{ @port }" if @port.length > 0
-      when 'relative'
-        hash = if @hash.length > 0 then "##{ @hash }" else @hash
-        str = [@pathname, Url.serializeParams(@search), hash].join ''
-      when 'absolute'
-        str = "#{ @toString('origin') }#{ @toString('relative') }"
-      else
-        str = ''
+  absolute: ->
+    "#{ @origin() }#{ @relative() }"
 
+  relative: ->
+    hash = if @hash.length > 0 then "##{ @hash }" else @hash
+    [@pathname, Url.serializeParams(@search), hash].join ''
+
+  origin: ->
+    str = [@protocol, '//', @hostname].join ''
+    str += ":#{ @port }" if @port.length > 0
     str
 
   setParam: () ->
